@@ -7,6 +7,8 @@ using ICSharpCode.AvalonEdit.Highlighting;
 using System.Windows.Input;
 using System;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
+using Miktemk;
 
 namespace AvalonEditSyntaxHighlightEditor.ViewModel
 {
@@ -51,15 +53,9 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
             {
                 SyntaxHighlightingSample = MyIdeUtils.LoadSyntaxHighlightingFromString(CodeDocument.Text);
             }
-            catch (ICSharpCode.AvalonEdit.Highlighting.HighlightingDefinitionInvalidException ex)
+            catch (HighlightingDefinitionInvalidException ex)
             {
-                if (ex.InnerException != null && ex.InnerException is System.Xml.XmlException)
-                {
-                    var exXml = ex.InnerException as System.Xml.XmlException;
-                    var errorLine = CodeDocument.GetLineByNumber(exXml.LineNumber);
-                    CurErrorWordHighlight = new WordHighlight(errorLine.Offset, errorLine.Length);
-                }
-                //ex.InnerException
+                CurErrorWordHighlight = MyIdeUtils.GetErrorPositionFromAvalonException(ex, CodeDocument);
             }
         }
 

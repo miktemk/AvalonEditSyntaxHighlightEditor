@@ -10,7 +10,7 @@
         mc:Ignorable="d ignore"
         Height="800"
         Width="1200"
-        Title="IDE test"
+        Title="AvalonEdit syntax-highlight editor"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     
     <!--<Window.Resources>

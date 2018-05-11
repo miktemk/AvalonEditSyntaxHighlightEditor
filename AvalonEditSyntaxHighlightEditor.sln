@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvalonEditSyntaxHighlightEditor", "AvalonEditSyntaxHighlightEditor\AvalonEditSyntaxHighlightEditor.csproj", "{06183351-3679-4BA2-9241-A5CF01EDD2CE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{41B8A91D-552F-4E45-9B43-2D55EB565B9B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miktemk", "..\MiktemkCommons\Miktemk\Miktemk.csproj", "{DB69C87C-B374-4CD7-B0CF-FAA5541B2DF6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,8 +19,15 @@ Global
 		{06183351-3679-4BA2-9241-A5CF01EDD2CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06183351-3679-4BA2-9241-A5CF01EDD2CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06183351-3679-4BA2-9241-A5CF01EDD2CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB69C87C-B374-4CD7-B0CF-FAA5541B2DF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB69C87C-B374-4CD7-B0CF-FAA5541B2DF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB69C87C-B374-4CD7-B0CF-FAA5541B2DF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB69C87C-B374-4CD7-B0CF-FAA5541B2DF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DB69C87C-B374-4CD7-B0CF-FAA5541B2DF6} = {41B8A91D-552F-4E45-9B43-2D55EB565B9B}
 	EndGlobalSection
 EndGlobal
