@@ -1,4 +1,5 @@
-﻿using ICSharpCode.AvalonEdit;
+﻿using AvalonEditSyntaxHighlightEditor.Code;
+using ICSharpCode.AvalonEdit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace AvalonEditSyntaxHighlightEditor.Behaviors
 {
@@ -39,6 +41,33 @@ namespace AvalonEditSyntaxHighlightEditor.Behaviors
         }
 
         #endregion
+
+        #region ------------------------------------------------------ ErrorWordHighlight ------------------------------------------------------
+
+        private const string RegionColorizer_WordHighlight_Error = "RegionColorizer.ErrorWordHighlight";
+        public static WordHighlight GetErrorWordHighlight(DependencyObject obj)
+        {
+            return (WordHighlight)obj.GetValue(ErrorWordHighlightProperty);
+        }
+
+        public static void SetErrorWordHighlight(DependencyObject obj, WordHighlight value)
+        {
+            obj.SetValue(ErrorWordHighlightProperty, value);
+        }
+
+        // Using a DependencyProperty as the backing store for ErrorWordHighlight.  This enables animation, styling, binding, etc…
+        public static readonly DependencyProperty ErrorWordHighlightProperty =
+            DependencyProperty.RegisterAttached("ErrorWordHighlight", typeof(WordHighlight), typeof(AEBehaviors), new PropertyMetadata(OnErrorWordHighlightChanged));
+
+        private static void OnErrorWordHighlightChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            TextEditor tEdit = (TextEditor)d;
+            var highlight = GetErrorWordHighlight(d);
+            tEdit.ApplyNamedWordHighlight(highlight, RegionColorizer_WordHighlight_Error, Brushes.White, Brushes.Red);
+        }
+
+        #endregion
+
 
     }
 }

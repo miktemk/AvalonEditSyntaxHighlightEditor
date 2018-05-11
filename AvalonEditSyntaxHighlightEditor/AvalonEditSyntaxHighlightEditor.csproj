@@ -84,8 +84,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Behaviors\AEBehaviors.cs" />
+    <Compile Include="Behaviors\AEExtensionMethods.cs" />
+    <Compile Include="Behaviors\RegionColorizer.cs" />
     <Compile Include="Code\MyIdeUtils.cs" />
     <Compile Include="Code\Constants.cs" />
+    <Compile Include="Code\WordHighlight.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">

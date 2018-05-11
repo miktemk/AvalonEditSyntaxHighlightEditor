@@ -49,6 +49,7 @@
             IsEnabled="True"
             WordWrap="False"
             myBehaviors:AEBehaviors.CaretPositionChanged="{Binding CaretPositionChangedCommand}"
+            myBehaviors:AEBehaviors.ErrorWordHighlight="{Binding CurErrorWordHighlight}"
             >
         </avalonEdit:TextEditor>
         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />

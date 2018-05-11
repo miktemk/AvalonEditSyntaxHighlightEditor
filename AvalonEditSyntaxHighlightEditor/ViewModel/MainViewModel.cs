@@ -18,6 +18,7 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
         public TextDocument CodeDocument { get; } = new TextDocument();
         public TextDocument CodeDocumentSample { get; } = new TextDocument();
         public IHighlightingDefinition SyntaxHighlightingSample { get; set; }
+        public WordHighlight CurErrorWordHighlight { get; set; }
 
         // commands
         public ICommand WindowLoadedCommand { get; }
@@ -52,7 +53,13 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
             }
             catch (ICSharpCode.AvalonEdit.Highlighting.HighlightingDefinitionInvalidException ex)
             {
-                
+                if (ex.InnerException != null && ex.InnerException is System.Xml.XmlException)
+                {
+                    var exXml = ex.InnerException as System.Xml.XmlException;
+                    var errorLine = CodeDocument.GetLineByNumber(exXml.LineNumber);
+                    CurErrorWordHighlight = new WordHighlight(errorLine.Offset, errorLine.Length);
+                }
+                //ex.InnerException
             }
         }
 
@@ -61,6 +68,7 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
             var curCaretOffset = caret.Offset;
             var curCaretLine = CodeDocument.GetLineByNumber(caret.Line);
             var curLineText = CodeDocument.GetText(curCaretLine);
+            CurErrorWordHighlight = null;
         }
 
         #endregion
