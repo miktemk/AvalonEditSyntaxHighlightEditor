@@ -9,6 +9,8 @@ using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Miktemk;
+using Miktemk.Wpf.AvalonEdit.Code;
+using Miktemk.Models;
 
 namespace AvalonEditSyntaxHighlightEditor.ViewModel
 {
@@ -20,6 +22,7 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
         public TextDocument CodeDocument { get; } = new TextDocument();
         public TextDocument CodeDocumentSample { get; } = new TextDocument();
         public IHighlightingDefinition SyntaxHighlightingSample { get; set; }
+        public string CurErrorMessage { get; set; }
         public WordHighlight CurErrorWordHighlight { get; set; }
 
         // commands
@@ -51,11 +54,14 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
         {
             try
             {
-                SyntaxHighlightingSample = MyIdeUtils.LoadSyntaxHighlightingFromString(CodeDocument.Text);
+                SyntaxHighlightingSample = UtilsAvalonEdit.LoadSyntaxHighlightingFromString(CodeDocument.Text);
+                CurErrorMessage = null;
             }
             catch (HighlightingDefinitionInvalidException ex)
             {
-                CurErrorWordHighlight = MyIdeUtils.GetErrorPositionFromAvalonException(ex, CodeDocument);
+                var errorStruct = MyIdeUtils.GetErrorPositionFromAvalonException(ex, CodeDocument);
+                CurErrorMessage = errorStruct.Message;
+                CurErrorWordHighlight = errorStruct.Highlight;
             }
         }
 
@@ -65,6 +71,7 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
             var curCaretLine = CodeDocument.GetLineByNumber(caret.Line);
             var curLineText = CodeDocument.GetText(curCaretLine);
             CurErrorWordHighlight = null;
+            //CurErrorMessage = null;
         }
 
         #endregion

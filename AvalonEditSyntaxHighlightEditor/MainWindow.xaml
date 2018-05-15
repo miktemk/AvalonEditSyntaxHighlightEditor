@@ -6,7 +6,7 @@
         xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
         xmlns:ignore="http://www.galasoft.ch/ignore"
         xmlns:intr="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-        xmlns:myBehaviors="clr-namespace:AvalonEditSyntaxHighlightEditor.Behaviors"
+        xmlns:myBehaviors="clr-namespace:Miktemk.Wpf.AvalonEdit.Behaviors;assembly=Miktemk.Wpf.AvalonEdit"
         mc:Ignorable="d ignore"
         Height="800"
         Width="1200"
@@ -34,37 +34,47 @@
         <KeyBinding Gesture="Ctrl+Space" Command="{Binding TriggerBuildCommand}"></KeyBinding>
     </Window.InputBindings>
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="2*"/>
-        </Grid.ColumnDefinitions>
-        <avalonEdit:TextEditor
-            Padding="10"
-            FontFamily="Consolas"
-            FontSize="10pt"
-            ShowLineNumbers="True"
-            SyntaxHighlighting="XML"
-            Document="{Binding CodeDocument}"
-            IsEnabled="True"
-            WordWrap="False"
-            myBehaviors:AEBehaviors.CaretPositionChanged="{Binding CaretPositionChangedCommand}"
-            myBehaviors:AEBehaviors.ErrorWordHighlight="{Binding CurErrorWordHighlight}"
-            >
-        </avalonEdit:TextEditor>
-        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
-        <avalonEdit:TextEditor
-            Grid.Column="2"
-            Padding="10"
-            FontFamily="Consolas"
-            FontSize="10pt"
-            ShowLineNumbers="True"
-            SyntaxHighlighting="{Binding SyntaxHighlightingSample}"
-            Document="{Binding CodeDocumentSample}"
-            IsEnabled="True"
-            WordWrap="False"
-            >
-        </avalonEdit:TextEditor>
-    </Grid>
+    <DockPanel>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock
+                    Text="{Binding CurErrorMessage}"
+                    Foreground="DarkRed"
+                />
+            </StatusBarItem>
+        </StatusBar>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <avalonEdit:TextEditor
+                Padding="10"
+                FontFamily="Consolas"
+                FontSize="10pt"
+                ShowLineNumbers="True"
+                SyntaxHighlighting="XML"
+                Document="{Binding CodeDocument}"
+                IsEnabled="True"
+                WordWrap="False"
+                myBehaviors:AEBehaviors.EnableBuiltInSearchPanel="True"
+                myBehaviors:AEBehaviors.OnCaretPositionChanged="{Binding CaretPositionChangedCommand}"
+                myBehaviors:AEBehaviors.ErrorWordHighlight="{Binding CurErrorWordHighlight}"
+            ></avalonEdit:TextEditor>
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+            <avalonEdit:TextEditor
+                Grid.Column="2"
+                Padding="10"
+                FontFamily="Consolas"
+                FontSize="10pt"
+                ShowLineNumbers="True"
+                SyntaxHighlighting="{Binding SyntaxHighlightingSample}"
+                Document="{Binding CodeDocumentSample}"
+                IsEnabled="True"
+                WordWrap="False"
+                myBehaviors:AEBehaviors.EnableBuiltInSearchPanel="True"
+            ></avalonEdit:TextEditor>
+        </Grid>
+    </DockPanel>
 </Window>

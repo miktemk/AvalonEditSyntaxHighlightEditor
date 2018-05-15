@@ -11,42 +11,33 @@ using System.Xml;
 using ICSharpCode.AvalonEdit.Document;
 using System.Text.RegularExpressions;
 using Miktemk;
+using Miktemk.Models;
 
 namespace AvalonEditSyntaxHighlightEditor.Code
 {
     public class MyIdeUtils
     {
-        public static IHighlightingDefinition LoadSyntaxHighlightingFromResource(string resourceName)
-        {
-            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
-            using (XmlTextReader xshd_reader = new XmlTextReader(stream))
-            {
-                return HighlightingLoader.Load(xshd_reader, HighlightingManager.Instance);
-            }
-        }
-
-        public static IHighlightingDefinition LoadSyntaxHighlightingFromString(string xshdScript)
-        {
-            using (var reader = new StringReader(xshdScript))
-            using (XmlTextReader xshd_reader = new XmlTextReader(reader))
-            {
-                return HighlightingLoader.Load(xshd_reader, HighlightingManager.Instance);
-            }
-        }
-
-        public static WordHighlight GetErrorPositionFromAvalonException(HighlightingDefinitionInvalidException ex, TextDocument codeDocument)
+        public static XmlSyntaxErrorVM GetErrorPositionFromAvalonException(HighlightingDefinitionInvalidException ex, TextDocument codeDocument)
         {
             if (ex.InnerException != null && ex.InnerException is System.Xml.XmlException)
             {
                 var exXml = ex.InnerException as System.Xml.XmlException;
                 var errorLine = codeDocument.GetLineByNumber(exXml.LineNumber);
-                return new WordHighlight(errorLine.Offset, errorLine.Length);
+                return new XmlSyntaxErrorVM
+                {
+                    Message = exXml.Message,
+                    Highlight = new WordHighlight(errorLine.Offset, errorLine.Length)
+                };
             }
             if (ex.InnerException != null && ex.InnerException is System.Xml.Schema.XmlSchemaValidationException)
             {
                 var exXml = ex.InnerException as System.Xml.Schema.XmlSchemaValidationException;
                 var errorLine = codeDocument.GetLineByNumber(exXml.LineNumber);
-                return new WordHighlight(errorLine.Offset, errorLine.Length);
+                return new XmlSyntaxErrorVM
+                {
+                    Message = exXml.Message,
+                    Highlight = new WordHighlight(errorLine.Offset, errorLine.Length)
+                };
             }
             else
             {
@@ -56,7 +47,11 @@ namespace AvalonEditSyntaxHighlightEditor.Code
                 {
                     var lineNum = regexMatch.Groups[1].Value.ParseIntOrDefault();
                     var errorLine = codeDocument.GetLineByNumber(lineNum);
-                    return new WordHighlight(errorLine.Offset, errorLine.Length);
+                    return new XmlSyntaxErrorVM
+                    {
+                        Message = ex.Message,
+                        Highlight = new WordHighlight(errorLine.Offset, errorLine.Length),
+                    };
                 }
             }
             return null;
