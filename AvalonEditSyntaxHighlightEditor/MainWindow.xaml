@@ -11,6 +11,7 @@
         Height="800"
         Width="1200"
         Title="AvalonEdit syntax-highlight editor"
+        Icon="Resources/nocode.png"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     
     <!--<Window.Resources>
