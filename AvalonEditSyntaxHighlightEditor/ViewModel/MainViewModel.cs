@@ -73,12 +73,12 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
 
         private void LoadPrevAppState(MyAppState appState)
         {
-            if (appState.LastFilenameXshd != null)
+            if (appState.LastFilenameXshd != null && File.Exists(appState.LastFilenameXshd))
             {
                 curFilenameXshd = appState.LastFilenameXshd;
                 CodeDocumentXshd.Text = File.ReadAllText(appState.LastFilenameXshd);
             }
-            if (appState.LastFilenameSample != null)
+            if (appState.LastFilenameSample != null && File.Exists(appState.LastFilenameSample))
                CodeDocumentSample.Text = File.ReadAllText(appState.LastFilenameSample);
             _CmdUser_TriggerBuild();
         }
@@ -107,6 +107,8 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
         }
         private void _CmdUser_TriggerBuild()
         {
+            if (String.IsNullOrEmpty(CodeDocumentXshd.Text))
+                return;
             try
             {
                 SyntaxHighlightingSample = UtilsAvalonEdit.LoadSyntaxHighlightingFromString(CodeDocumentXshd.Text);

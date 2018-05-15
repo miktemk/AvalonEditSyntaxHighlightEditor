@@ -19,6 +19,8 @@ namespace AvalonEditSyntaxHighlightEditor.Code
     {
         public static XmlSyntaxErrorVM GetErrorPositionFromAvalonException(HighlightingDefinitionInvalidException ex, TextDocument codeDocument)
         {
+            if (String.IsNullOrEmpty(codeDocument.Text))
+                return null;
             if (ex.InnerException != null && ex.InnerException is System.Xml.XmlException)
             {
                 var exXml = ex.InnerException as System.Xml.XmlException;
