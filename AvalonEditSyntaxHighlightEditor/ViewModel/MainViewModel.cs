@@ -11,65 +11,120 @@ using System.Text.RegularExpressions;
 using Miktemk;
 using Miktemk.Wpf.AvalonEdit.Code;
 using Miktemk.Models;
+using Miktemk.Wpf.Core.Behaviors.VM;
+using System.IO;
+using AvalonEditSyntaxHighlightEditor.Code.Services;
 
 namespace AvalonEditSyntaxHighlightEditor.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
-        public string WelcomeTitle { get; set; } = "MVVM test app";
+        private readonly MyAppStateService appStateService;
+        private string curFilenameXshd;
+
+        public string AppTitle { get; set; } = "XshdEditor";
+
+        // ui config
+        public UIElementDragDropConfig DragDropConfigXshd { get; }
+        public UIElementDragDropConfig DragDropConfigSample { get; }
 
         // avalon-edit
-        public TextDocument CodeDocument { get; } = new TextDocument();
+        public TextDocument CodeDocumentXshd { get; } = new TextDocument();
         public TextDocument CodeDocumentSample { get; } = new TextDocument();
         public IHighlightingDefinition SyntaxHighlightingSample { get; set; }
         public string CurErrorMessage { get; set; }
         public WordHighlight CurErrorWordHighlight { get; set; }
 
         // commands
-        public ICommand WindowLoadedCommand { get; }
-        public ICommand WindowClosingCommand { get; }
-        public ICommand TriggerBuildCommand { get; }
-        public ICommand CaretPositionChangedCommand { get; }
+        public ICommand CmdWindow_Loaded { get; }
+        public ICommand CmdWindow_Closing { get; }
+        public ICommand CmdUser_OnDragDropXshd { get; }
+        public ICommand CmdUser_OnDragDropSample { get; }
+        public ICommand CmdUser_SaveFile { get; }
+        public ICommand CmdUser_TriggerBuild { get; }
+        public ICommand CmdAvalon_CaretPositionChanged { get; }
 
-        public MainViewModel()
+        public MainViewModel(MyAppStateService appStateService)
         {
+            this.appStateService = appStateService;
+
             // set up view
-            CodeDocument.Text = @"";
+            DragDropConfigXshd = Constants.Config.DragDropConfigXshd;
+            DragDropConfigSample = Constants.Config.DragDropConfigSample;
+
+            CodeDocumentXshd.Text = @"";
             CodeDocumentSample.Text = @"";
 
             // assign commands
-            WindowLoadedCommand = new RelayCommand(WindowLoaded);
-            WindowClosingCommand = new RelayCommand(WindowClosing);
-            TriggerBuildCommand = new RelayCommand(TriggerBuild);
-            CaretPositionChangedCommand = new RelayCommand<Caret>(CaretPositionChanged);
+            CmdWindow_Loaded = new RelayCommand(_CmdWindow_Loaded);
+            CmdWindow_Closing = new RelayCommand(_CmdWindow_Closing);
+            CmdUser_OnDragDropXshd = new RelayCommand<string>(_CmdUser_OnDragDropXshd);
+            CmdUser_OnDragDropSample = new RelayCommand<string>(_CmdUser_OnDragDropSample);
+            CmdUser_SaveFile = new RelayCommand(_CmdUser_SaveFile);
+            CmdUser_TriggerBuild = new RelayCommand(_CmdUser_TriggerBuild);
+            CmdAvalon_CaretPositionChanged = new RelayCommand<Caret>(_CmdAvalon_CaretPositionChanged);
+
+            var appState = appStateService.LoadOrCreateNewAppState();
+            if (appState != null)
+                LoadPrevAppState(appState);
         }
 
-        #region ------------------ commands -----------------------
+        #region ------------------ commands/events -----------------------
 
-        private void WindowLoaded() { }
+        private void LoadPrevAppState(MyAppState appState)
+        {
+            if (appState.LastFilenameXshd != null)
+            {
+                curFilenameXshd = appState.LastFilenameXshd;
+                CodeDocumentXshd.Text = File.ReadAllText(appState.LastFilenameXshd);
+            }
+            if (appState.LastFilenameSample != null)
+               CodeDocumentSample.Text = File.ReadAllText(appState.LastFilenameSample);
+            _CmdUser_TriggerBuild();
+        }
 
-        private void WindowClosing() { }
+        private void _CmdWindow_Loaded() { }
 
-        private void TriggerBuild()
+        private void _CmdWindow_Closing() { }
+
+        private void _CmdUser_OnDragDropXshd(string filename)
+        {
+            CodeDocumentXshd.Text = File.ReadAllText(filename);
+            curFilenameXshd = filename;
+            appStateService.SaveAppState_FilenameXshd(filename);
+        }
+
+        private void _CmdUser_OnDragDropSample(string filename)
+        {
+            CodeDocumentSample.Text = File.ReadAllText(filename);
+            appStateService.SaveAppState_FilenameSample(filename);
+        }
+
+        private void _CmdUser_SaveFile()
+        {
+            if (curFilenameXshd != null)
+                File.WriteAllText(curFilenameXshd, CodeDocumentXshd.Text);
+        }
+        private void _CmdUser_TriggerBuild()
         {
             try
             {
-                SyntaxHighlightingSample = UtilsAvalonEdit.LoadSyntaxHighlightingFromString(CodeDocument.Text);
+                SyntaxHighlightingSample = UtilsAvalonEdit.LoadSyntaxHighlightingFromString(CodeDocumentXshd.Text);
                 CurErrorMessage = null;
             }
             catch (HighlightingDefinitionInvalidException ex)
             {
-                var errorStruct = MyIdeUtils.GetErrorPositionFromAvalonException(ex, CodeDocument);
+                var errorStruct = MyIdeUtils.GetErrorPositionFromAvalonException(ex, CodeDocumentXshd);
                 CurErrorMessage = errorStruct.Message;
                 CurErrorWordHighlight = errorStruct.Highlight;
             }
         }
 
-        private void CaretPositionChanged(Caret caret)
+        private void _CmdAvalon_CaretPositionChanged(Caret caret)
         {
             var curCaretOffset = caret.Offset;
-            var curCaretLine = CodeDocument.GetLineByNumber(caret.Line);
-            var curLineText = CodeDocument.GetText(curCaretLine);
+            var curCaretLine = CodeDocumentXshd.GetLineByNumber(caret.Line);
+            var curLineText = CodeDocumentXshd.GetText(curCaretLine);
             CurErrorWordHighlight = null;
             //CurErrorMessage = null;
         }

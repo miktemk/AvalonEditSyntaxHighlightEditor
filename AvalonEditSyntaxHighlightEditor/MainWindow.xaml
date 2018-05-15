@@ -6,7 +6,8 @@
         xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
         xmlns:ignore="http://www.galasoft.ch/ignore"
         xmlns:intr="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-        xmlns:myBehaviors="clr-namespace:Miktemk.Wpf.AvalonEdit.Behaviors;assembly=Miktemk.Wpf.AvalonEdit"
+        xmlns:myBehaviors="clr-namespace:Miktemk.Wpf.Core.Behaviors;assembly=Miktemk.Wpf"
+        xmlns:myBehaviorsAE="clr-namespace:Miktemk.Wpf.AvalonEdit.Behaviors;assembly=Miktemk.Wpf.AvalonEdit"
         mc:Ignorable="d ignore"
         Height="800"
         Width="1200"
@@ -23,15 +24,16 @@
 
     <intr:Interaction.Triggers>
         <intr:EventTrigger EventName="Loaded">
-            <intr:InvokeCommandAction Command="{Binding WindowLoadedCommand}"/>
+            <intr:InvokeCommandAction Command="{Binding CmdWindow_Loaded}"/>
         </intr:EventTrigger>
         <intr:EventTrigger EventName="Closing">
-            <intr:InvokeCommandAction Command="{Binding WindowClosingCommand}"/>
+            <intr:InvokeCommandAction Command="{Binding CmdWindow_Closing}"/>
         </intr:EventTrigger>
     </intr:Interaction.Triggers>
 
     <Window.InputBindings>
-        <KeyBinding Gesture="Ctrl+Space" Command="{Binding TriggerBuildCommand}"></KeyBinding>
+        <KeyBinding Gesture="Ctrl+Space" Command="{Binding CmdUser_TriggerBuild}"></KeyBinding>
+        <KeyBinding Gesture="Ctrl+S" Command="{Binding CmdUser_SaveFile}"></KeyBinding>
     </Window.InputBindings>
 
     <DockPanel>
@@ -55,12 +57,15 @@
                 FontSize="10pt"
                 ShowLineNumbers="True"
                 SyntaxHighlighting="XML"
-                Document="{Binding CodeDocument}"
+                Document="{Binding CodeDocumentXshd}"
                 IsEnabled="True"
                 WordWrap="False"
-                myBehaviors:AEBehaviors.EnableBuiltInSearchPanel="True"
-                myBehaviors:AEBehaviors.OnCaretPositionChanged="{Binding CaretPositionChangedCommand}"
-                myBehaviors:AEBehaviors.ErrorWordHighlight="{Binding CurErrorWordHighlight}"
+                myBehaviorsAE:AEBehaviors.EnableBuiltInSearchPanel="True"
+                myBehaviorsAE:AEBehaviors.AvalonTabsToSpaces="2"
+                myBehaviors:GeneralBehaviors.OnDragDrop="{Binding CmdUser_OnDragDropXshd}"
+                myBehaviors:GeneralBehaviors.OnDragDropConfig="{Binding DragDropConfigXshd}"
+                myBehaviorsAE:AEBehaviors.OnCaretPositionChanged="{Binding CmdAvalon_CaretPositionChanged}"
+                myBehaviorsAE:AEBehaviors.ErrorWordHighlight="{Binding CurErrorWordHighlight}"
             ></avalonEdit:TextEditor>
             <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
             <avalonEdit:TextEditor
@@ -73,7 +78,10 @@
                 Document="{Binding CodeDocumentSample}"
                 IsEnabled="True"
                 WordWrap="False"
-                myBehaviors:AEBehaviors.EnableBuiltInSearchPanel="True"
+                myBehaviorsAE:AEBehaviors.EnableBuiltInSearchPanel="True"
+                myBehaviorsAE:AEBehaviors.AvalonTabsToSpaces="2"
+                myBehaviors:GeneralBehaviors.OnDragDrop="{Binding CmdUser_OnDragDropSample}"
+                myBehaviors:GeneralBehaviors.OnDragDropConfig="{Binding DragDropConfigSample}"
             ></avalonEdit:TextEditor>
         </Grid>
     </DockPanel>

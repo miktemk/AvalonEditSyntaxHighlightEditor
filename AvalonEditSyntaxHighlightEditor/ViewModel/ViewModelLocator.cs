@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using AvalonEditSyntaxHighlightEditor.Code.Services;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
 
@@ -10,7 +11,7 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
-            //SimpleIoc.Default.Register<IDataService, DataService>();
+            SimpleIoc.Default.Register<MyAppStateService, MyAppStateService>();
 
             SimpleIoc.Default.Register<MainViewModel>();
         }

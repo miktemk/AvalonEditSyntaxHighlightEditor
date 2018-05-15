@@ -89,6 +89,8 @@
     </ApplicationDefinition>
     <Compile Include="Code\MyIdeUtils.cs" />
     <Compile Include="Code\Constants.cs" />
+    <Compile Include="Code\Services\MyAppState.cs" />
+    <Compile Include="Code\Services\MyAppStateService.cs" />
     <Compile Include="Code\XmlSyntaxErrorVM.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
