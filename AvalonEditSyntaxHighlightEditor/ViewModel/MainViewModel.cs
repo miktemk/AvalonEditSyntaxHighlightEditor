@@ -118,6 +118,10 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
                 CurErrorMessage = errorStruct.Message;
                 CurErrorWordHighlight = errorStruct.Highlight;
             }
+            catch (FormatException ex)
+            {
+                CurErrorMessage = ex.Message;
+            }
         }
 
         private void _CmdAvalon_CaretPositionChanged(Caret caret)
