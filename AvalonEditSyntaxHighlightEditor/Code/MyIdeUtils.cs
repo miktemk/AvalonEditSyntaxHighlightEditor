@@ -41,23 +41,38 @@ namespace AvalonEditSyntaxHighlightEditor.Code
                     Highlight = new WordHighlight(errorLine.Offset, errorLine.Length)
                 };
             }
-            else
+
+            var regexMatch = TryTheseRegexUntilMatches(ex.Message, new[]
             {
-                // https://regex101.com/r/ieg7bu/1
-                var regexMatch = Regex.Match(ex.Message, @"Error at line (\d+):");
-                if (regexMatch.Success)
+                // https://regex101.com/r/ieg7bu/4
+                @"Error at line (\d+):",
+                // https://regex101.com/r/9ZbB2G/2
+                @"Error at position \(line (\d+)"
+            });
+
+            if (regexMatch?.Success?? false)
+            {
+                var lineNum = regexMatch.Groups[1].Value.ParseIntOrDefault();
+                var errorLine = codeDocument.GetLineByNumber(lineNum);
+                return new XmlSyntaxErrorVM
                 {
-                    var lineNum = regexMatch.Groups[1].Value.ParseIntOrDefault();
-                    var errorLine = codeDocument.GetLineByNumber(lineNum);
-                    return new XmlSyntaxErrorVM
-                    {
-                        Message = ex.Message,
-                        Highlight = new WordHighlight(errorLine.Offset, errorLine.Length),
-                    };
-                }
+                    Message = ex.Message,
+                    Highlight = new WordHighlight(errorLine.Offset, errorLine.Length),
+                };
             }
-            return null;
+
+            return new XmlSyntaxErrorVM
+            {
+                Message = ex.Message,
+                Highlight = null,
+            };
         }
 
+        private static Match TryTheseRegexUntilMatches(string input, string[] regexes)
+        {
+            return regexes
+                .Select(x => Regex.Match(input, x))
+                .FirstOrDefault(x => x.Success);
+        }
     }
 }

@@ -11,7 +11,7 @@
         mc:Ignorable="d ignore"
         Height="800"
         Width="1200"
-        Title="AvalonEdit syntax-highlight editor"
+        Title="{Binding WindowTitle}"
         Icon="Resources/nocode.png"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     
@@ -79,7 +79,6 @@
                 IsEnabled="True"
                 WordWrap="False"
                 myBehaviorsAE:AEBehaviors.EnableBuiltInSearchPanel="True"
-                myBehaviorsAE:AEBehaviors.AvalonTabsToSpaces="2"
                 myBehaviors:GeneralBehaviors.OnDragDrop="{Binding CmdUser_OnDragDropSample}"
                 myBehaviors:GeneralBehaviors.OnDragDropConfig="{Binding DragDropConfigSample}"
             ></avalonEdit:TextEditor>

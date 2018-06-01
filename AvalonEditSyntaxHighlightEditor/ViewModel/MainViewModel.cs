@@ -20,9 +20,10 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
     public class MainViewModel : ViewModelBase
     {
         private readonly MyAppStateService appStateService;
-        private string curFilenameXshd;
 
-        public string AppTitle { get; set; } = "XshdEditor";
+        private string CurFilenameXshd { get; set; }
+        private bool IsDocumentsChanged { get; set; } = false;
+        public string WindowTitle => $"AvalonEdit XSHD - {CurFilenameXshd}{(IsDocumentsChanged ? " *" : "")}";
 
         // ui config
         public UIElementDragDropConfig DragDropConfigXshd { get; }
@@ -55,6 +56,8 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
             CodeDocumentXshd.Text = @"";
             CodeDocumentSample.Text = @"";
 
+            CodeDocumentXshd.Changed += CodeDocument_Changed;
+
             // assign commands
             CmdWindow_Loaded = new RelayCommand(_CmdWindow_Loaded);
             CmdWindow_Closing = new RelayCommand(_CmdWindow_Closing);
@@ -75,8 +78,9 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
         {
             if (appState.LastFilenameXshd != null && File.Exists(appState.LastFilenameXshd))
             {
-                curFilenameXshd = appState.LastFilenameXshd;
+                CurFilenameXshd = appState.LastFilenameXshd;
                 CodeDocumentXshd.Text = File.ReadAllText(appState.LastFilenameXshd);
+                IsDocumentsChanged = false;
             }
             if (appState.LastFilenameSample != null && File.Exists(appState.LastFilenameSample))
                CodeDocumentSample.Text = File.ReadAllText(appState.LastFilenameSample);
@@ -90,7 +94,8 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
         private void _CmdUser_OnDragDropXshd(string filename)
         {
             CodeDocumentXshd.Text = File.ReadAllText(filename);
-            curFilenameXshd = filename;
+            CurFilenameXshd = filename;
+            IsDocumentsChanged = false;
             appStateService.SaveAppState_FilenameXshd(filename);
         }
 
@@ -102,8 +107,11 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
 
         private void _CmdUser_SaveFile()
         {
-            if (curFilenameXshd != null)
-                File.WriteAllText(curFilenameXshd, CodeDocumentXshd.Text);
+            if (CurFilenameXshd != null)
+            {
+                File.WriteAllText(CurFilenameXshd, CodeDocumentXshd.Text);
+                IsDocumentsChanged = false;
+            }
         }
         private void _CmdUser_TriggerBuild()
         {
@@ -133,6 +141,11 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
             var curLineText = CodeDocumentXshd.GetText(curCaretLine);
             CurErrorWordHighlight = null;
             //CurErrorMessage = null;
+        }
+
+        private void CodeDocument_Changed(object sender, DocumentChangeEventArgs e)
+        {
+            IsDocumentsChanged = true;
         }
 
         #endregion
