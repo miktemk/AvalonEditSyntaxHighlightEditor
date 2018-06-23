@@ -68,11 +68,38 @@ namespace AvalonEditSyntaxHighlightEditor.Code
             };
         }
 
+        public static XmlSyntaxErrorVM GetErrorPositionFromGenericException(Exception ex, TextDocument codeDocument)
+        {
+            if (String.IsNullOrEmpty(codeDocument.Text))
+                return null;
+
+            // https://regex101.com/r/RSNWFg/1
+            var regexMatch = Regex.Match(ex.Message, @"Change the highlighting definition so that the rule matches at least one character.*Regex: (.*)", RegexOptions.Singleline);
+            if (regexMatch.Success)
+            {
+                var regexStr = regexMatch.Groups[1].Value;
+                return new XmlSyntaxErrorVM
+                {
+                    Message = ex.Message,
+                    Highlight = new WordHighlight(codeDocument.Text.IndexOf(regexStr), regexStr.Length),
+                };
+            }
+
+            return new XmlSyntaxErrorVM
+            {
+                Message = ex.Message,
+                Highlight = null,
+            };
+        }
+
+        //----------------------------------------------------------------------------------------------
+
         private static Match TryTheseRegexUntilMatches(string input, string[] regexes)
         {
             return regexes
                 .Select(x => Regex.Match(input, x))
                 .FirstOrDefault(x => x.Success);
         }
+
     }
 }

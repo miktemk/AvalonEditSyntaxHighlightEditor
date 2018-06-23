@@ -14,6 +14,8 @@ using Miktemk.Models;
 using Miktemk.Wpf.Core.Behaviors.VM;
 using System.IO;
 using AvalonEditSyntaxHighlightEditor.Code.Services;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace AvalonEditSyntaxHighlightEditor.ViewModel
 {
@@ -49,6 +51,9 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
         {
             this.appStateService = appStateService;
 
+            // global error handling
+            Application.Current.DispatcherUnhandledException += Application_DispatcherUnhandledException;
+
             // set up view
             DragDropConfigXshd = Constants.Config.DragDropConfigXshd;
             DragDropConfigSample = Constants.Config.DragDropConfigSample;
@@ -66,10 +71,6 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
             CmdUser_SaveFile = new RelayCommand(_CmdUser_SaveFile);
             CmdUser_TriggerBuild = new RelayCommand(_CmdUser_TriggerBuild);
             CmdAvalon_CaretPositionChanged = new RelayCommand<Caret>(_CmdAvalon_CaretPositionChanged);
-
-            var appState = appStateService.LoadOrCreateNewAppState();
-            if (appState != null)
-                LoadPrevAppState(appState);
         }
 
         #region ------------------ commands/events -----------------------
@@ -87,7 +88,18 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
             _CmdUser_TriggerBuild();
         }
 
-        private void _CmdWindow_Loaded() { }
+        private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            HandleCatastrophicException(e.Exception);
+            e.Handled = true;
+        }
+
+        private void _CmdWindow_Loaded()
+        {
+            var appState = appStateService.LoadOrCreateNewAppState();
+            if (appState != null)
+                LoadPrevAppState(appState);
+        }
 
         private void _CmdWindow_Closing() { }
 
@@ -132,6 +144,19 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
             {
                 CurErrorMessage = ex.Message;
             }
+            catch (Exception ex)
+            {
+                HandleCatastrophicException(ex);
+            }
+        }
+
+        private void HandleCatastrophicException(Exception ex)
+        {
+            var errorStruct = MyIdeUtils.GetErrorPositionFromGenericException(ex, CodeDocumentXshd);
+            CurErrorMessage = errorStruct.Message;
+            if (errorStruct.Highlight != null)
+                CurErrorWordHighlight = errorStruct.Highlight;
+            SyntaxHighlightingSample = null;
         }
 
         private void _CmdAvalon_CaretPositionChanged(Caret caret)
