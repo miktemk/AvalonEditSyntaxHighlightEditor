@@ -28,8 +28,8 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
         public string WindowTitle => $"AvalonEdit XSHD - {CurFilenameXshd}{(IsDocumentsChanged ? " *" : "")}";
 
         // ui config
-        public UIElementDragDropConfig DragDropConfigXshd { get; }
-        public UIElementDragDropConfig DragDropConfigSample { get; }
+        public UIElementDragDropConfig DragDropConfigXshd { get; } = Constants.Config.DragDropConfigXshd;
+        public UIElementDragDropConfig DragDropConfigSample { get; } = Constants.Config.DragDropConfigSample;
 
         // avalon-edit
         public TextDocument CodeDocumentXshd { get; } = new TextDocument();
@@ -55,9 +55,6 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
             Application.Current.DispatcherUnhandledException += Application_DispatcherUnhandledException;
 
             // set up view
-            DragDropConfigXshd = Constants.Config.DragDropConfigXshd;
-            DragDropConfigSample = Constants.Config.DragDropConfigSample;
-
             CodeDocumentXshd.Text = @"";
             CodeDocumentSample.Text = @"";
 
