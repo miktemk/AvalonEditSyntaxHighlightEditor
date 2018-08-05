@@ -45,6 +45,7 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
         public ICommand CmdUser_OnDragDropSample { get; }
         public ICommand CmdUser_SaveFile { get; }
         public ICommand CmdUser_TriggerBuild { get; }
+        public ICommand CmdUser_RevealInExplorer { get; }
         public ICommand CmdAvalon_CaretPositionChanged { get; }
 
         public MainViewModel(MyAppStateService appStateService)
@@ -67,6 +68,7 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
             CmdUser_OnDragDropSample = new RelayCommand<string>(_CmdUser_OnDragDropSample);
             CmdUser_SaveFile = new RelayCommand(_CmdUser_SaveFile);
             CmdUser_TriggerBuild = new RelayCommand(_CmdUser_TriggerBuild);
+            CmdUser_RevealInExplorer = new RelayCommand(_CmdUser_RevealInExplorer);
             CmdAvalon_CaretPositionChanged = new RelayCommand<Caret>(_CmdAvalon_CaretPositionChanged);
         }
 
@@ -145,6 +147,11 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
             {
                 HandleCatastrophicException(ex);
             }
+        }
+        private void _CmdUser_RevealInExplorer()
+        {
+            if (CurFilenameXshd != null)
+                UtilsOp.OpenWinExplorerAndSelectThisFile(CurFilenameXshd);
         }
 
         private void HandleCatastrophicException(Exception ex)

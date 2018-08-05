@@ -34,6 +34,7 @@
     <Window.InputBindings>
         <KeyBinding Gesture="Ctrl+Space" Command="{Binding CmdUser_TriggerBuild}"></KeyBinding>
         <KeyBinding Gesture="Ctrl+S" Command="{Binding CmdUser_SaveFile}"></KeyBinding>
+        <KeyBinding Gesture="Ctrl+Shift+O" Command="{Binding CmdUser_RevealInExplorer}"></KeyBinding>
     </Window.InputBindings>
 
     <DockPanel>
