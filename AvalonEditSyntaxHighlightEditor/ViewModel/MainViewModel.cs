@@ -58,6 +58,8 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
             // set up view
             CodeDocumentXshd.Text = @"";
             CodeDocumentSample.Text = @"";
+            CodeDocumentXshd.UndoStack.ClearAll();
+            CodeDocumentSample.UndoStack.ClearAll();
 
             CodeDocumentXshd.Changed += CodeDocument_Changed;
 
@@ -80,10 +82,14 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
             {
                 CurFilenameXshd = appState.LastFilenameXshd;
                 CodeDocumentXshd.Text = File.ReadAllText(appState.LastFilenameXshd);
+                CodeDocumentXshd.UndoStack.ClearAll();
                 IsDocumentsChanged = false;
             }
             if (appState.LastFilenameSample != null && File.Exists(appState.LastFilenameSample))
-               CodeDocumentSample.Text = File.ReadAllText(appState.LastFilenameSample);
+            {
+                CodeDocumentSample.Text = File.ReadAllText(appState.LastFilenameSample);
+                CodeDocumentSample.UndoStack.ClearAll();
+            }
             _CmdUser_TriggerBuild();
         }
 

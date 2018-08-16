@@ -62,6 +62,7 @@
                 IsEnabled="True"
                 WordWrap="False"
                 myBehaviorsAE:AEBehaviors.EnableBuiltInSearchPanel="True"
+                myBehaviorsAE:AEBehaviors.AddHtmlColorPicker="True"
                 myBehaviorsAE:AEBehaviors.AvalonTabsToSpaces="2"
                 myBehaviors:GeneralBehaviors.OnDragDrop="{Binding CmdUser_OnDragDropXshd}"
                 myBehaviors:GeneralBehaviors.OnDragDropConfig="{Binding DragDropConfigXshd}"
