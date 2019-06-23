@@ -13,6 +13,7 @@ namespace AvalonEditSyntaxHighlightEditor.Code
         {
             // TODO: find a t4 template to generate this from contents of "Resource" folder
             public const string SyntaxXshd = "AvalonEditSyntaxHighlightEditor.Resources.syntax.xshd";
+            public const string Arg1Key = "AvalonEditSyntaxHighlightEditor.CmdLineArg1";
         }
 
         public static class MyFilenames

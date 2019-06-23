@@ -76,21 +76,31 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
 
         #region ------------------ commands/events -----------------------
 
-        private void LoadPrevAppState(MyAppState appState)
+        private void LoadAppState(MyAppState prevAppState)
         {
-            if (appState.LastFilenameXshd != null && File.Exists(appState.LastFilenameXshd))
+            var argFilename = (string)Application.Current.Resources[Constants.Resources.Arg1Key];
+            if (TryToLoadXshdFile(argFilename))
+                appStateService.SaveAppState_FilenameXshd(argFilename);
+            else if (TryToLoadXshdFile(prevAppState.LastFilenameXshd))
+            { }
+            
+            if (prevAppState.LastFilenameSample != null && File.Exists(prevAppState.LastFilenameSample))
             {
-                CurFilenameXshd = appState.LastFilenameXshd;
-                CodeDocumentXshd.Text = File.ReadAllText(appState.LastFilenameXshd);
-                CodeDocumentXshd.UndoStack.ClearAll();
-                IsDocumentsChanged = false;
-            }
-            if (appState.LastFilenameSample != null && File.Exists(appState.LastFilenameSample))
-            {
-                CodeDocumentSample.Text = File.ReadAllText(appState.LastFilenameSample);
+                CodeDocumentSample.Text = File.ReadAllText(prevAppState.LastFilenameSample);
                 CodeDocumentSample.UndoStack.ClearAll();
             }
             _CmdUser_TriggerBuild();
+        }
+
+        private bool TryToLoadXshdFile(string filename)
+        {
+            if (filename == null || !File.Exists(filename))
+                return false;
+            CurFilenameXshd = filename;
+            CodeDocumentXshd.Text = File.ReadAllText(filename);
+            CodeDocumentXshd.UndoStack.ClearAll();
+            IsDocumentsChanged = false;
+            return true;
         }
 
         private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
@@ -103,7 +113,7 @@ namespace AvalonEditSyntaxHighlightEditor.ViewModel
         {
             var appState = appStateService.LoadOrCreateNewAppState();
             if (appState != null)
-                LoadPrevAppState(appState);
+                LoadAppState(appState);
         }
 
         private void _CmdWindow_Closing() { }
