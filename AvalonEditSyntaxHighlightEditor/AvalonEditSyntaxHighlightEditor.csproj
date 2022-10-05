@@ -43,6 +43,9 @@
     <ApplicationIcon>Resources\nocode.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ColorPickerWPF, Version=1.0.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ColorPickerWPF.1.0.9\lib\net461\ColorPickerWPF.dll</HintPath>
+    </Reference>
     <Reference Include="CommonServiceLocator, Version=2.0.6.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.2.0.6\lib\net48\CommonServiceLocator.dll</HintPath>
     </Reference>
@@ -81,6 +84,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WriteableBitmapEx.Wpf, Version=1.5.0.0, Culture=neutral, PublicKeyToken=50375ca6144f1c69, processorArchitecture=MSIL">
+      <HintPath>..\packages\WriteableBitmapEx.1.5.1.0\lib\net40\WriteableBitmapEx.Wpf.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -140,6 +146,10 @@
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MiktemkCommons\Miktemk.Wpf.AvalonEdit.LegacyColorPicker\Miktemk.Wpf.AvalonEdit.LegacyColorPicker.csproj">
+      <Project>{8a11d9c6-bb02-4334-90e5-49b40b78cdd3}</Project>
+      <Name>Miktemk.Wpf.AvalonEdit.LegacyColorPicker</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MiktemkCommons\Miktemk.Wpf.AvalonEdit\Miktemk.Wpf.AvalonEdit.csproj">
       <Project>{92e324f2-c3aa-4b6f-86a3-668dc6866843}</Project>
       <Name>Miktemk.Wpf.AvalonEdit</Name>

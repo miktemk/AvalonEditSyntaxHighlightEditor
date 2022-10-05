@@ -6,8 +6,9 @@
         xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
         xmlns:ignore="http://www.galasoft.ch/ignore"
         xmlns:intr="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-        xmlns:myBehaviors="clr-namespace:Miktemk.Wpf.Core.Behaviors;assembly=Miktemk.Wpf"
-        xmlns:myBehaviorsAE="clr-namespace:Miktemk.Wpf.AvalonEdit.Behaviors;assembly=Miktemk.Wpf.AvalonEdit"
+        xmlns:mikBehaviors="clr-namespace:Miktemk.Wpf.Core.Behaviors;assembly=Miktemk.Wpf"
+        xmlns:mikBehaviorsAE="clr-namespace:Miktemk.Wpf.AvalonEdit.Behaviors;assembly=Miktemk.Wpf.AvalonEdit"
+        xmlns:mikLegacyColorPicker="clr-namespace:Miktemk.Wpf.AvalonEdit.LegacyColorPicker;assembly=Miktemk.Wpf.AvalonEdit.LegacyColorPicker"
         mc:Ignorable="d ignore"
         Height="800"
         Width="1200"
@@ -61,13 +62,14 @@
                 Document="{Binding CodeDocumentXshd}"
                 IsEnabled="True"
                 WordWrap="False"
-                myBehaviorsAE:AEBehaviors.EnableBuiltInSearchPanel="True"
-                myBehaviorsAE:AEBehaviors.AddHtmlColorPicker="True"
-                myBehaviorsAE:AEBehaviors.AvalonTabsToSpaces="2"
-                myBehaviors:GeneralBehaviors.OnDragDrop="{Binding CmdUser_OnDragDropXshd}"
-                myBehaviors:GeneralBehaviors.OnDragDropConfig="{Binding DragDropConfigXshd}"
-                myBehaviorsAE:AEBehaviors.OnCaretPositionChanged="{Binding CmdAvalon_CaretPositionChanged}"
-                myBehaviorsAE:AEBehaviors.ErrorWordHighlight="{Binding CurErrorWordHighlight}"
+                mikBehaviorsAE:AEBehaviors.EnableBuiltInSearchPanel="True"
+                mikBehaviorsAE:AEBehaviors.AddHtmlDocumentColorizer="True"
+                mikLegacyColorPicker:AEBehaviors.AddHtmlColorPicker="True"
+                mikBehaviorsAE:AEBehaviors.AvalonTabsToSpaces="2"
+                mikBehaviors:GeneralBehaviors.OnDragDrop="{Binding CmdUser_OnDragDropXshd}"
+                mikBehaviors:GeneralBehaviors.OnDragDropConfig="{Binding DragDropConfigXshd}"
+                mikBehaviorsAE:AEBehaviors.OnCaretPositionChanged="{Binding CmdAvalon_CaretPositionChanged}"
+                mikBehaviorsAE:AEBehaviors.ErrorWordHighlight="{Binding CurErrorWordHighlight}"
             ></avalonEdit:TextEditor>
             <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
             <avalonEdit:TextEditor
@@ -80,9 +82,9 @@
                 Document="{Binding CodeDocumentSample}"
                 IsEnabled="True"
                 WordWrap="False"
-                myBehaviorsAE:AEBehaviors.EnableBuiltInSearchPanel="True"
-                myBehaviors:GeneralBehaviors.OnDragDrop="{Binding CmdUser_OnDragDropSample}"
-                myBehaviors:GeneralBehaviors.OnDragDropConfig="{Binding DragDropConfigSample}"
+                mikBehaviorsAE:AEBehaviors.EnableBuiltInSearchPanel="True"
+                mikBehaviors:GeneralBehaviors.OnDragDrop="{Binding CmdUser_OnDragDropSample}"
+                mikBehaviors:GeneralBehaviors.OnDragDropConfig="{Binding DragDropConfigSample}"
             ></avalonEdit:TextEditor>
         </Grid>
     </DockPanel>
