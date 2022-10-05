@@ -1,7 +1,7 @@
 ﻿using AvalonEditSyntaxHighlightEditor.Code.Services;
+using CommonServiceLocator;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
-using Microsoft.Practices.ServiceLocation;
 
 namespace AvalonEditSyntaxHighlightEditor.ViewModel
 {
